@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://travel-9qtu.onrender.com/';
+const API_BASE_URL = 'https://travel-9qtu.onrender.com';
 
 export const fetchAirportsByCountry = async (country) => {
   try {
