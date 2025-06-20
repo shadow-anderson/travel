@@ -5,7 +5,7 @@ const API_BASE_URL = 'https://travel-9qtu.onrender.com';
 export const fetchAirportsByCountry = async (country) => {
   try {
     // Pass country name directly to backend
-    const response = await axios.get(`${API_BASE_URL}/airports`, {
+    const response = await axios.get(`${API_BASE_URL}/api/airports`, {
       params: { country }
     });
     return response.data;
