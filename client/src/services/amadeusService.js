@@ -28,7 +28,7 @@ export const searchFlights = async (params) => {
       adults: params.adults || 1
     });
 
-    const response = await axios.get(`${API_BASE_URL}/flights`, {
+    const response = await axios.get(`${API_BASE_URL}/api/flights`, {
       params: {
         selectedCity: params.selectedCity,
         destinationLocationCode: 'DEL', // Default to Delhi
