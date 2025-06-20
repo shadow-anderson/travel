@@ -185,10 +185,11 @@ const TravelSearch = () => {
       setIsLoadingCities(true);
       setCityError(null);
       try {
-        const airports = await fetchAirportsByCountry(selectedOption.value); // Pass country code
+        // Send country name to backend for CSV match
+        const airports = await fetchAirportsByCountry(selectedOption.label); // Use label (country name)
         const options = airports.map(airport => ({
           value: airport.code,
-          label: airport.name // Already formatted as "City (CODE) - Airport Name"
+          label: airport.name // Format: "[Airport Name] - [City Name] ([IATA Code])"
         }));
         setCityOptions(options);
       } catch (error) {
@@ -237,132 +238,120 @@ const TravelSearch = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center text-blue-800 mb-8">
-          Find Flights Through MedYatra
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-50 flex flex-col items-center justify-center py-8 px-2">
+      <div className="w-full max-w-4xl bg-white/90 rounded-2xl shadow-2xl p-8 border border-blue-100">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center text-blue-700 mb-10 tracking-tight drop-shadow-lg">
+          ✈️ MedYatra Flight Finder
         </h1>
-        
-        <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-xl p-6">
-          {/* Form Section */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select your country
-                </label>
-                <Select
-                  options={countries}
-                  value={formData.from}
-                  onChange={handleCountryChange}
-                  styles={customStyles}
-                  placeholder="Search and select your country"
-                  isClearable
-                  isSearchable
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select your city
-                </label>
-                <Select
-                  value={formData.city}
-                  onChange={handleCityChange}
-                  options={cityOptions}
-                  styles={customStyles}
-                  placeholder={formData.from ? (isLoadingCities ? 'Loading cities...' : 'Select city') : 'Select a country first'}
-                  isClearable
-                  isSearchable
-                  required
-                  isDisabled={!formData.from || isLoadingCities}
-                  noOptionsMessage={() => cityError ? cityError : 'No cities found'}
-                />
-                {cityError && (
-                  <p className="mt-2 text-sm text-red-600">
-                    {cityError}
-                  </p>
-                )}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Departure Date
-                </label>
-                <input
-                  type="date"
-                  name="departDate"
-                  value={formData.departDate}
-                  onChange={handleDepartureDateChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                  required
-                  min={new Date().toISOString().split('T')[0]}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  To
-                </label>
-                <input
-                  type="text"
-                  value="Delhi (DEL)"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-50"
-                  disabled
-                />
-              </div>
+        {/* Form Section */}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label className="block text-base font-semibold text-blue-800 mb-2">
+                Select your country
+              </label>
+              <Select
+                options={countries}
+                value={formData.from}
+                onChange={handleCountryChange}
+                styles={customStyles}
+                placeholder="Search and select your country"
+                isClearable
+                isSearchable
+                required
+              />
             </div>
-
-            {searchError && (
-              <div className="text-red-600 text-sm mt-2">
-                {searchError}
-              </div>
-            )}
-
-            <div className="mt-6">
-              <button
-                type="submit"
-                disabled={isSearching}
-                className={`w-full bg-blue-600 text-white py-3 px-6 rounded-md font-medium
-                  ${isSearching ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
-              >
-                {isSearching ? 'Searching Flights...' : 'Search Flights'}
-              </button>
+            <div>
+              <label className="block text-base font-semibold text-blue-800 mb-2">
+                Select your city
+              </label>
+              <Select
+                value={formData.city}
+                onChange={handleCityChange}
+                options={cityOptions}
+                styles={customStyles}
+                placeholder={formData.from ? (isLoadingCities ? 'Loading cities...' : 'Select city') : 'Select a country first'}
+                isClearable
+                isSearchable
+                required
+                isDisabled={!formData.from || isLoadingCities}
+                noOptionsMessage={() => cityError ? cityError : 'No cities found'}
+              />
+              {cityError && (
+                <p className="mt-2 text-sm text-red-600">
+                  {cityError}
+                </p>
+              )}
             </div>
-          </form>
-
-          {/* Flight Results Section */}
-          {isSearching && (
-            <div className="mt-8 text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-              <p className="mt-2 text-gray-600">Searching for flights...</p>
+            <div>
+              <label className="block text-base font-semibold text-blue-800 mb-2">
+                Departure Date
+              </label>
+              <input
+                type="date"
+                name="departDate"
+                value={formData.departDate}
+                onChange={handleDepartureDateChange}
+                className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-400 bg-blue-50"
+                required
+                min={new Date().toISOString().split('T')[0]}
+              />
+            </div>
+            <div>
+              <label className="block text-base font-semibold text-blue-800 mb-2">
+                To
+              </label>
+              <input
+                type="text"
+                value="Delhi (DEL)"
+                className="w-full px-4 py-2 border border-blue-200 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+                disabled
+              />
+            </div>
+          </div>
+          {searchError && (
+            <div className="text-red-600 text-sm mt-2">
+              {searchError}
             </div>
           )}
-
-          {!isSearching && searchError && (
-            <div className="mt-8 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-600">{searchError}</p>
+          <div className="mt-8">
+            <button
+              type="submit"
+              disabled={isSearching}
+              className={`w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white py-3 px-6 rounded-lg font-bold shadow-md transition-all duration-200
+                ${isSearching ? 'opacity-60 cursor-not-allowed' : 'hover:from-blue-600 hover:to-blue-800 hover:scale-105'}`}
+            >
+              {isSearching ? 'Searching Flights...' : 'Search Flights'}
+            </button>
+          </div>
+        </form>
+        {/* Flight Results Section */}
+        {isSearching && (
+          <div className="mt-10 text-center">
+            <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+            <p className="mt-3 text-blue-700 font-medium">Searching for flights...</p>
+          </div>
+        )}
+        {!isSearching && searchError && (
+          <div className="mt-10 p-4 bg-red-50 border border-red-200 rounded-xl">
+            <p className="text-red-700 font-semibold">{searchError}</p>
+          </div>
+        )}
+        {!isSearching && flights.length === 0 && !searchError && (
+          <div className="mt-10 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
+            <p className="text-yellow-700 font-semibold">No flights found for the selected criteria.</p>
+          </div>
+        )}
+        {!isSearching && flights.length > 0 && (
+          <div className="mt-10">
+            <h2 className="text-2xl font-bold mb-6 text-blue-800">Available Flights ({flights.length})</h2>
+            <div className="space-y-6">
+              {flights.map((flight, index) => (
+                <FlightDetails key={index} flight={flight} />
+              ))}
             </div>
-          )}
-
-          {!isSearching && flights.length === 0 && !searchError && (
-            <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-yellow-600">No flights found for the selected criteria.</p>
-            </div>
-          )}
-
-          {!isSearching && flights.length > 0 && (
-            <div className="mt-8">
-              <h2 className="text-2xl font-semibold mb-4">Available Flights ({flights.length})</h2>
-              <div className="space-y-4">
-                {flights.map((flight, index) => (
-                  <FlightDetails key={index} flight={flight} />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

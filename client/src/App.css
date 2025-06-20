@@ -1,0 +1,27 @@
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #e0e7ff 0%, #fff 100%);
+  min-height: 100vh;
+  margin: 0;
+  color: #1e293b;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #c7d2fe;
+  border-radius: 4px;
+}
+
+input, select, button {
+  outline: none;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+input:focus, select:focus {
+  box-shadow: 0 0 0 2px #3b82f6;
+  border-color: #3b82f6;
+}

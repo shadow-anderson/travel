@@ -118,61 +118,6 @@ class AmadeusService {
             }
         }
     }
-
-    async searchAirports(countryCode) {
-        try {
-            const token = await this.ensureValidToken();
-            const keywords = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-            let allAirports = new Map(); // Use Map to avoid duplicates
-
-            // Loop through each letter to get all airports
-            for (const keyword of keywords) {
-                try {
-                    const response = await axios.get(
-                        `${this.baseURL}/v1/reference-data/locations`,
-                        {
-                            headers: {
-                                'Authorization': `Bearer ${token}`
-                            },
-                            params: {
-                                subType: 'AIRPORT',
-                                keyword: keyword,
-                                countryCode: countryCode,
-                                page: {
-                                    limit: 100 // Maximum allowed by Amadeus
-                                }
-                            }
-                        }
-                    );
-
-                    if (response.data && response.data.data) {
-                        response.data.data.forEach(airport => {
-                            // Only add if it has an IATA code and city name
-                            if (airport.iataCode && airport.address?.cityName) {
-                                allAirports.set(airport.iataCode, {
-                                    code: airport.iataCode,
-                                    name: `${airport.address.cityName} (${airport.iataCode}) - ${airport.name}`
-                                });
-                            }
-                        });
-                    }
-                    
-                    // Add a small delay to respect rate limits
-                    await new Promise(resolve => setTimeout(resolve, 100));
-
-                } catch (error) {
-                    console.error(`Error fetching airports for keyword ${keyword}:`, error.message);
-                    // Continue with next letter even if one fails
-                }
-            }
-
-            return Array.from(allAirports.values());
-
-        } catch (error) {
-            console.error('Error in searchAirports:', error);
-            throw new Error('Failed to search airports');
-        }
-    }
 }
 
 module.exports = new AmadeusService();

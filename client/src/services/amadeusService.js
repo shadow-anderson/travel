@@ -2,12 +2,11 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5001/api';
 
-export const fetchAirportsByCountry= async (country) => {
+export const fetchAirportsByCountry = async (country) => {
   try {
-    // Extract country code from country name using countries list
-    const countryCode = country.split(' ')[0]; // Assumes format is like "IN India" or just "IN"
+    // Pass country name directly to backend
     const response = await axios.get(`${API_BASE_URL}/airports`, {
-      params: { country: countryCode }
+      params: { country }
     });
     return response.data;
   } catch (error) {
