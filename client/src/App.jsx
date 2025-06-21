@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import './App.css'
-import TravelSearch from './components/TravelSearch'
+import TravelBooking from './TravelBooking'
 
 function App() {
   return (
     <>
-      <TravelSearch />
+      <TravelBooking />
     </>
   );
 }

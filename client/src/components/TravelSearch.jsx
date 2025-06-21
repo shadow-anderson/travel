@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { countries } from '../data/countries';
 import { fetchAirportsByCountry, searchFlights } from '../services/amadeusService';
+import { UserIcon, MapPinIcon, CalendarDaysIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
 
 const FlightDetails = ({ flight }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -238,17 +239,26 @@ const TravelSearch = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-blue-50 flex flex-col items-center justify-center py-8 px-2">
-      <div className="w-full max-w-4xl bg-white/90 rounded-2xl shadow-2xl p-8 border border-blue-100">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-center text-blue-700 mb-10 tracking-tight drop-shadow-lg">
-          ✈️ MedYatra Flight Finder
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-center py-8 px-2 font-sans">
+      {/* Branding Header */}
+      <div className="flex flex-col items-center mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <img src="/medyatralogo.jpg" alt="MedYatra Logo" className="h-10 w-10 rounded-full shadow-md bg-white border border-blue-100" />
+          <span className="text-2xl font-extrabold text-blue-700 tracking-tight drop-shadow-sm">MedYatra Travel</span>
+        </div>
+        <span className="text-blue-600 font-medium text-sm bg-blue-50 px-3 py-1 rounded-full shadow-sm">Travel for Health, Made Easy</span>
+      </div>
+      <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 border border-blue-100">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-center text-blue-700 mb-8 tracking-tight drop-shadow-lg">
+          <PaperAirplaneIcon className="inline h-8 w-8 text-blue-500 mr-2 align-middle" />
+          Book Your Medical Flight
         </h1>
         {/* Form Section */}
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-base font-semibold text-blue-800 mb-2">
-                Select your country
+              <label className="flex items-center gap-1 text-sm font-semibold text-gray-900 mb-2">
+                <UserIcon className="h-5 w-5 text-blue-400" /> Select your country
               </label>
               <Select
                 options={countries}
@@ -259,11 +269,12 @@ const TravelSearch = () => {
                 isClearable
                 isSearchable
                 required
+                classNamePrefix="react-select"
               />
             </div>
             <div>
-              <label className="block text-base font-semibold text-blue-800 mb-2">
-                Select your city
+              <label className="flex items-center gap-1 text-sm font-semibold text-gray-900 mb-2">
+                <MapPinIcon className="h-5 w-5 text-blue-400" /> Select your city
               </label>
               <Select
                 value={formData.city}
@@ -276,52 +287,62 @@ const TravelSearch = () => {
                 required
                 isDisabled={!formData.from || isLoadingCities}
                 noOptionsMessage={() => cityError ? cityError : 'No cities found'}
+                classNamePrefix="react-select"
               />
               {cityError && (
-                <p className="mt-2 text-sm text-red-600">
+                <p className="mt-2 text-xs text-red-600">
                   {cityError}
                 </p>
               )}
             </div>
             <div>
-              <label className="block text-base font-semibold text-blue-800 mb-2">
-                Departure Date
+              <label className="flex items-center gap-1 text-sm font-semibold text-gray-900 mb-2">
+                <CalendarDaysIcon className="h-5 w-5 text-blue-400" /> Departure Date
               </label>
               <input
                 type="date"
                 name="departDate"
                 value={formData.departDate}
                 onChange={handleDepartureDateChange}
-                className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-400 bg-blue-50"
+                className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-blue-400 bg-blue-50 text-gray-900 font-medium"
                 required
                 min={new Date().toISOString().split('T')[0]}
               />
             </div>
             <div>
-              <label className="block text-base font-semibold text-blue-800 mb-2">
-                To
+              <label className="flex items-center gap-1 text-sm font-semibold text-gray-900 mb-2">
+                <PaperAirplaneIcon className="h-5 w-5 text-blue-400" /> To
               </label>
               <input
                 type="text"
                 value="Delhi (DEL)"
-                className="w-full px-4 py-2 border border-blue-200 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+                className="w-full px-4 py-2 border border-blue-200 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed font-medium"
                 disabled
               />
             </div>
           </div>
           {searchError && (
-            <div className="text-red-600 text-sm mt-2">
+            <div className="text-red-600 text-xs mt-2">
               {searchError}
             </div>
           )}
-          <div className="mt-8">
+          <div className="mt-6">
             <button
               type="submit"
               disabled={isSearching}
-              className={`w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white py-3 px-6 rounded-lg font-bold shadow-md transition-all duration-200
-                ${isSearching ? 'opacity-60 cursor-not-allowed' : 'hover:from-blue-600 hover:to-blue-800 hover:scale-105'}`}
+              className={`w-full bg-gradient-to-r from-blue-600 to-blue-400 text-white py-3 px-6 rounded-xl font-bold shadow-lg text-lg tracking-wide transition-all duration-200
+                ${isSearching ? 'opacity-60 cursor-not-allowed' : 'hover:from-blue-700 hover:to-blue-500 hover:scale-[1.03] active:scale-100'}`}
             >
-              {isSearching ? 'Searching Flights...' : 'Search Flights'}
+              {isSearching ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
+                  Searching Flights...
+                </span>
+              ) : (
+                <span className="flex items-center justify-center gap-2">
+                  <PaperAirplaneIcon className="h-5 w-5 text-white" /> Search Flights
+                </span>
+              )}
             </button>
           </div>
         </form>
