@@ -2,8 +2,9 @@
 // Handles OAuth2 authentication for Amadeus API
 import axios from 'axios';
 
-const AMADEUS_CLIENT_ID = 'n4ypFI3gwUhKzU3fhBYfKSlDjlcjrBq7'; // Replace with your Amadeus API Key
-const AMADEUS_CLIENT_SECRET = 'DLRMEFTxSG6dxmqx'; // Replace with your Amadeus API Secret
+// Use environment variables for Amadeus credentials
+const AMADEUS_CLIENT_ID = import.meta.env.VITE_AMADEUS_CLIENT_ID;
+const AMADEUS_CLIENT_SECRET = import.meta.env.VITE_AMADEUS_CLIENT_SECRET;
 const AMADEUS_AUTH_URL = 'https://test.api.amadeus.com/v1/security/oauth2/token';
 
 export async function getAmadeusAccessToken() {
