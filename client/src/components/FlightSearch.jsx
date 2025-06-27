@@ -113,11 +113,15 @@ const FlightDetails = ({ flight }) => {
 };
 
 const FlightSearch = () => {
+
+  // Today's date in yyyy-mm-dd for min attribute
+  const todayStr = new Date().toISOString().split('T')[0];
+
   const [formData, setFormData] = useState({
     from: null,  // This will store the selected country
     city: null,
     to: 'Delhi',
-    departDate: '',
+    departDate: todayStr,
     returnDate: '',
     passengers: 1
   });
@@ -126,7 +130,9 @@ const FlightSearch = () => {
   const [isLoadingCities, setIsLoadingCities] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
-  const [flights, setFlights] = useState([]);
+  const [flights, setFlights] = useState(null);
+
+
 
   // Variables to always hold the selected city and departure date
   const selectedCity = formData.city;
@@ -148,17 +154,17 @@ const FlightSearch = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+    // console.log('Form Data:', formData);
     setIsSearching(true);
     setFlights([]);
-    
+
     try {
       const flightResults = await searchFlights({
         selectedCity: formData.city.value,
         selectedDepartureDate: formData.departDate,
         adults: formData.passengers
       });
-      
+
       setFlights(flightResults);
     } catch (error) {
       setSearchError(error.response?.data?.error || 'Failed to search flights. Please try again.');
@@ -181,7 +187,7 @@ const FlightSearch = () => {
       from: selectedOption,
       city: null // Reset city when country changes
     }));
-    
+
     if (selectedOption) {
       setIsLoadingCities(true);
       setCityError(null);
@@ -350,12 +356,12 @@ const FlightSearch = () => {
             <p className="text-red-700 font-semibold">{searchError}</p>
           </div>
         )}
-        {!isSearching && flights.length === 0 && !searchError && (
+        {!isSearching && flights && flights.length === 0 && !searchError && (
           <div className="mt-10 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
             <p className="text-yellow-700 font-semibold">No flights found for the selected criteria.</p>
           </div>
         )}
-        {!isSearching && flights.length > 0 && (
+        {!isSearching && flights && flights.length > 0 && (
           <div className="mt-10">
             <h2 className="text-2xl font-bold mb-6 text-blue-800">Available Flights ({flights.length})</h2>
             <div className="space-y-6">

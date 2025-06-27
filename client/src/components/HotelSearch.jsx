@@ -215,7 +215,7 @@ const HotelSearch = () => {
     // State for hotel search
     const [hotelLoading, setHotelLoading] = useState(false);
     const [hotelError, setHotelError] = useState('');
-    const [hotelResults, setHotelResults] = useState([]);
+    const [hotelResults, setHotelResults] = useState(null);
 
     const adultOptions = [1, 2, 3, 4, 5].map((num) => ({
         label: `${num} ${num === 1 ? "Adult" : "Adults"}`,
@@ -558,7 +558,7 @@ const HotelSearch = () => {
                     </div>
                 )}
 
-                {!isSearching && !hotelError && !Array.isArray(hotelResults) && (
+                {!isSearching && !hotelError && hotelResults && !Array.isArray(hotelResults) && (
                     <div className="mt-10 p-4 bg-red-50 border border-red-200 rounded-xl">
                         <p className="text-red-700 font-semibold">
                             Unexpected response from the server. Please try again later.
@@ -566,7 +566,7 @@ const HotelSearch = () => {
                     </div>
                 )}
 
-                {!isSearching && Array.isArray(hotelResults) && hotelResults.length === 0 && (
+                {!isSearching && hotelResults && Array.isArray(hotelResults) && hotelResults.length === 0 && (
                     <div className="mt-10 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
                         <p className="text-yellow-700 font-semibold">No Hotels found for the selected criteria.</p>
                     </div>
