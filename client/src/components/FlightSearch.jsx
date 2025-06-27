@@ -112,7 +112,7 @@ const FlightDetails = ({ flight }) => {
   );
 };
 
-const TravelSearch = () => {
+const FlightSearch = () => {
   const [formData, setFormData] = useState({
     from: null,  // This will store the selected country
     city: null,
@@ -239,15 +239,7 @@ const TravelSearch = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-center py-8 px-2 font-sans">
-      {/* Branding Header */}
-      <div className="flex flex-col items-center mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <img src="/medyatralogo.jpg" alt="MedYatra Logo" className="h-10 w-10 rounded-full shadow-md bg-white border border-blue-100" />
-          <span className="text-2xl font-extrabold text-blue-700 tracking-tight drop-shadow-sm">MedYatra Travel</span>
-        </div>
-        <span className="text-blue-600 font-medium text-sm bg-blue-50 px-3 py-1 rounded-full shadow-sm">Travel for Health, Made Easy</span>
-      </div>
+    <div className="bg-transparent flex flex-col items-center justify-center font-sans">
       <div className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 border border-blue-100">
         <h1 className="text-3xl md:text-4xl font-extrabold text-center text-blue-700 mb-8 tracking-tight drop-shadow-lg">
           <PaperAirplaneIcon className="inline h-8 w-8 text-blue-500 mr-2 align-middle" />
@@ -378,4 +370,4 @@ const TravelSearch = () => {
   );
 };
 
-export default TravelSearch;
+export default FlightSearch;
